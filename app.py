@@ -2,6 +2,12 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 
+st.set_page_config(
+    page_title="Movie Recommender",
+    page_icon="🎬",
+    layout="centered"
+)
+
 movies = pd.read_csv("movies.csv")
 ratings = pd.read_csv("ratings.csv")
 
@@ -27,15 +33,17 @@ def recommend_movies(movie_name, n=5):
     similar_movies = similarity_df[movie_name].sort_values(ascending=False)
     return similar_movies.iloc[1:n+1]
 
-st.title("Movie Recommendation System")
+st.title("🎬 Movie Recommendation System")
+st.markdown("Discover movies similar to the one you love.")
 
 movie = st.selectbox(
     "Select a movie",
     movie_matrix.columns
 )
 
-if st.button("Recommend"):
+if st.button("Get Recommendations"):
     recommendations = recommend_movies(movie)
-    st.write("Recommended Movies:")
-    for m in recommendations.index:
-        st.write(m)
+    st.subheader("⭐ Recommended Movies")
+
+    for i, m in enumerate(recommendations.index, 1):
+        st.write(f"{i}. {m}")
